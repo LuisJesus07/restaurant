@@ -30,6 +30,14 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('/dishes/{id}','DishController@show');
 	Route::put('/dishes', 'DishController@update');
 	Route::delete('/dishes/{id}', 'DishController@destroy');
+
+	//rutas mesas
+	Route::get('/tables', 'TableController@index');
+	Route::post('/tables','TableController@store');
+	Route::get('/tables/{id}','TableController@show');
+	Route::get('/tables/get/{id}','TableController@get');
+	Route::put('/tables', 'TableController@update');
+	Route::delete('/tables/{id}', 'TableController@destroy');
  
 
 });
