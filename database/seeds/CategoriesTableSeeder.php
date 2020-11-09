@@ -13,18 +13,18 @@ class CategoriesTableSeeder extends Seeder
     public function run()
     {
         $category = new Category();
+        $category->name = "Desayunos";
+        $category->description = "Platillos para desayunar";
+        $category->save();
+        
+        $category = new Category();
         $category->name = "Comidas";
-        $category->description = "Platillos del mar";
+        $category->description = "Comidas";
         $category->save();
 
         $category = new Category();
         $category->name = "Bebidas";
-        $category->description = "Descripción bebidas";
-        $category->save();
-
-        $category = new Category();
-        $category->name = "Desayunos";
-        $category->description = "Platillos para desayunar";
+        $category->description = "Bebidas para acompañar comidas";
         $category->save();
     }
 }

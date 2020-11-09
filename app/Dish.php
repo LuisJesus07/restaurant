@@ -5,16 +5,16 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Category extends Model
+class Dish extends Model
 {
-    use SoftDeletes;
+	use SoftDeletes;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'description',
+        'name', 'description','sales_counter', 'price', 'category_id',
     ];
 
     /**
@@ -31,8 +31,9 @@ class Category extends Model
      */
     protected $casts = [];
 
-    public function dishes(){
+    public function category(){
 
-        return $this->hasMany(Dish::class);
+        return $this->belongsTo(Category::class);
     }
+
 }

@@ -17,4 +17,19 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+
+
+Route::middleware(['auth'])->group(function () {
+
+	Route::get('/home', 'HomeController@index')->name('home');
+
+
+	//rutas platillos
+	Route::get('/dishes', 'DishController@index');
+	Route::post('/dishes','DishController@store');
+	Route::get('/dishes/{id}','DishController@show');
+	Route::put('/dishes', 'DishController@update');
+	Route::delete('/dishes/{id}', 'DishController@destroy');
+ 
+
+});
