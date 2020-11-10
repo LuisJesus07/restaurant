@@ -33,7 +33,7 @@ class Table extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_tables');
+        return $this->belongsToMany(User::class, 'user_table');
     }
 
     public function bills()

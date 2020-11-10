@@ -74,31 +74,6 @@ class PermissionsTableSeeder extends Seeder
         ]);
 
 
-        //Gerente
-        $gerente = Role::create(['name' => 'Gerente']);
-        $gerente->givePermissionTo([
-            'Visualizar usuarios',
-            'Agregar usuarios',
-
-            'Visualizar platillos',
-            'Editar platillos',
-            'Agregar platillos',
-            'Eliminar platillos',
-
-            'Visualizar mesas',
-            'Editar mesas',
-            'Agregar mesas',
-            'Eliminar mesas',
-
-            'Visualizar ventas',
-            'Agregar ventas',
-
-            'Visualizar cortes',
-            'Agregar cortes',
-
-
-        ]);
-
         //Mesero
         $mesero = Role::create(['name' => 'Mesero']);
         $mesero->givePermissionTo([

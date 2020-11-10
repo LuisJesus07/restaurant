@@ -23,9 +23,6 @@
                                 {{$table->name}} - {{$table->table_number}}
                             </strong>
                         </h3>
-                        <p>
-                            <i class="fa fa-map-marker"></i> {{$table->area->name}}
-                        </p>
                         <address>
                             <strong>Información</strong><br>
                             Capacidad: {{$table->capacity}} personas<br>

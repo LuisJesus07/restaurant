@@ -16,7 +16,7 @@
 
                     <li>
                         <span class="m-r-sm text-muted welcome-message">
-                            Punto de venta - Hacienda el paraíso
+                            Restaurante
                         </span>
                     </li> 
 
