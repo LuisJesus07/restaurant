@@ -24,6 +24,15 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('/home', 'HomeController@index')->name('home');
 
 
+	//rutas modulo de usuarios
+	Route::get('/users', 'UserController@index');
+	Route::post('/users','UserController@store');
+	Route::get('/users/{id}','UserController@show');
+	Route::delete('/users/{id}', 'UserController@destroy');
+	Route::put('/users/', 'UserController@update');
+	Route::get('/users/get/{id}','UserController@detail');
+	Route::post('/users/tables', 'UserController@assignTable');
+
 	//rutas platillos
 	Route::get('/dishes', 'DishController@index');
 	Route::post('/dishes','DishController@store');
@@ -38,6 +47,20 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('/tables/get/{id}','TableController@get');
 	Route::put('/tables', 'TableController@update');
 	Route::delete('/tables/{id}', 'TableController@destroy');
+
+	//rutas modulo de ventas
+	Route::get('/sales/{start_date?}/{end_date?}', 'BillController@index');
+	Route::get('/bill_detail/{id}', 'BillController@detail');
+	Route::get('/close_bill/{id}', 'BillController@close_bill');
+	Route::get('/cancel_bill/{id}', 'BillController@cancel_bill');
+
+	//rutas del modulo mesero
+	Route::get('/mesero', 'MeseroController@index');
+	Route::get('/bill_table/{table_id}/{bill_id?}/', 'MeseroController@bill_table');
+	Route::get('/addDsih/{dish_id}/{table_id}/{bill_id?}', 'DishesBillController@store');
+	Route::get('removeDish/{bill_id}/{dish_id}', 'DishesBillController@remove_quantity_dish');
+	Route::get('add_people_number/{bill_id}/{table_id}' , 'BillController@add_people_number');
+	Route::get('remove_people_number/{bill_id}' , 'BillController@remove_people_number');
  
 
 });

@@ -36,4 +36,9 @@ class Dish extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function bills()
+    {
+        return $this->belongsToMany(Bill::class);
+    }
+
 }
