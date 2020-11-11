@@ -21,9 +21,7 @@ class MeseroController extends Controller
             $user = User::where('status','active')
                     ->with(['tables' => function($q){
                         $q->with(['bills' => function($q){
-                            $q->where('status','open')
-                            ->with('user')
-                            ->first();
+                            $q->where('status','open');
                         }]);
                         //$query->orderBy('table_number','ASC');
                     }])
@@ -32,6 +30,7 @@ class MeseroController extends Controller
 
 
             $breadcrum = true;
+            //return $user;
             return view('mesero.index', compact('user','breadcrum'));
         
         }else{
