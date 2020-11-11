@@ -34,7 +34,7 @@
 					            @if(isset($category->dishes) && count($category->dishes)>0) 
 					            @foreach($category->dishes as $dish)
 					            <div class="col-lg-3">
-					            	<a href="{{ url('/dish_detail') }}/{{ $dish->id }} "> 
+					            	<a href="{{ url('/dishes') }}/{{ $dish->id }} "> 
 						                <div class="widget style1 navy-bg">
 						                    <div class="row">
 						                        <div class="col-4">
@@ -47,7 +47,7 @@
 						                            		
 						                            	</b>
 						                            </span>
-						                            <h2 class="font-bold">${{ number_format($dish->price->price,2) }}</h2>
+						                            <h2 class="font-bold">${{ number_format($dish->price,2) }}</h2>
 						                        </div>
 						                    </div>
 						                </div>

@@ -106,9 +106,19 @@ class DishController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function get($id)
     {
-        //
+        if(Auth::user()->hasPermissionTo('Visualizar platillos')){
+
+            $dish = Dish::find($id);
+            
+            return $dish;
+        
+        }else{
+
+            return "error";
+
+        }
     }
 
     /**
@@ -118,7 +128,7 @@ class DishController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         if(Auth::user()->hasPermissionTo('Editar platillos') ){
 

@@ -24,9 +24,7 @@
                             {{$bill->table->name}} - #{{$bill->table->table_number}}
                         </div>
                         
-                        <p>
-                            <i class="fa fa-map-marker"></i> {{$bill->table->area->name}}
-                        </p>
+                        
                         <address>
                             <strong>Información</strong><br>
                             No. de personas: {{$bill->people_number}} personas<br> 

@@ -105,17 +105,17 @@
 				                </tr>
 			                </thead>
 			                <tbody>
-			                	@if(isset($bill->dishes_bill) && count($bill->dishes_bill) > 0)
-		  							@foreach($bill->dishes_bill as $dish)
+			                	@if(isset($bill->dishes) && count($bill->dishes) > 0)
+		  							@foreach($bill->dishes as $dish)
 				                <tr class="gradeX">
 				                    <th>
-                                        {{$dish->dish->category->name}}
+                                        {{$dish->category->name}}
                                     </th>
 				                    <td>
-                                        <a href="/dish_detail/{{$dish->dish->id}}">
+                                        <a href="/dish_detail/{{$dish->id}}">
 
                                            <b>
-				                    	       {{$dish->dish->name}}
+				                    	       {{$dish->name}}
                                            </b>
 
                                         </a> 
@@ -127,7 +127,7 @@
                                         {{$dish->created_at}}
                                     </td>
 				                    <td class="center">
-                                        ${{number_format($dish->dish->price->price * $dish->quantity,2)}}
+                                        ${{number_format($dish->price * $dish->pivot->quantity,2)}}
                                     </td>
 				                </tr>
 				                	@endforeach

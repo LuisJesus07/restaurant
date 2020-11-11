@@ -101,9 +101,11 @@ class BillController extends Controller
         //obtener cuenta con platillos y su categoria
         $bill = Bill::where('id',$id)
                 ->with('user')
-                ->with('dishes_bill.dish')
+                ->with('dishes.category')
                 ->with('table')
                 ->first();
+
+        //return $bill;
 
         //obtener fecha
         $date = $bill->created_at->format('d-m-Y');
@@ -119,12 +121,12 @@ class BillController extends Controller
         $num_bebidas = 0;
         $num_platillos = 0;
 
-        foreach ($bill->dishes_bill as $dish ) {
+        foreach ($bill->dishes as $dish ) {
             
-            if($dish->dish->category->name == "Bebidas" ){
-              $num_bebidas += $dish->quantity;
+            if($dish->category->name == "Bebidas" ){
+              $num_bebidas += $dish->pivot->quantity;
             }else{
-              $num_platillos += $dish->quantity;
+              $num_platillos += $dish->pivot->quantity;
             }
         }
 

@@ -37,6 +37,7 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('/dishes', 'DishController@index');
 	Route::post('/dishes','DishController@store');
 	Route::get('/dishes/{id}','DishController@show');
+	Route::get('/dishes/get/{id}', 'DishController@get');
 	Route::put('/dishes', 'DishController@update');
 	Route::delete('/dishes/{id}', 'DishController@destroy');
 
@@ -53,6 +54,10 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('/bill_detail/{id}', 'BillController@detail');
 	Route::get('/close_bill/{id}', 'BillController@close_bill');
 	Route::get('/cancel_bill/{id}', 'BillController@cancel_bill');
+
+	//rutas del modulo caja
+	Route::get('/box', 'BoxController@index');
+	Route::get('/bill/amount/{id}', 'BoxController@totalAmount');
 
 	//rutas del modulo mesero
 	Route::get('/mesero', 'MeseroController@index');

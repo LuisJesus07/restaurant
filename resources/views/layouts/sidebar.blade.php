@@ -19,18 +19,6 @@
                     </div>
                 </li> 
 
-                <li class="{{ (request()->is('home')) ? 'active' : '' }}">
-                    <a href="{{ url('/home') }}">
-                        <i class="fa fa-tachometer fa-2x"></i> 
-                        <span class="nav-label">
-                            DASHBOARD
-                        </span>
-                        <!-- <span class="label label-info float-right">
-                            62
-                        </span> -->
-                    </a>
-                </li> 
-
                 <li class="{{ (request()->is('user*')) ? 'active' : '' }}">
                     <a href="{{ url('/users') }}">
                         <i class="fa fa-users fa-2x"></i> 
@@ -48,15 +36,6 @@
                         <i class="fa fa-money fa-2x"></i> 
                         <span class="nav-label">
                             VENTAS
-                        </span> 
-                    </a>
-                </li>
-
-                <li class="{{ (request()->is('cut*')) ? 'active' : '' }}">
-                    <a href="{{ url('/cuts') }}">
-                        <i class="fa fa-scissors fa-2x"></i> 
-                        <span class="nav-label">
-                            CORTES
                         </span> 
                     </a>
                 </li>
