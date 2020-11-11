@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDishBillTable extends Migration
+class CreateBillDishTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateDishBillTable extends Migration
      */
     public function up()
     {
-        Schema::create('dish_bill', function (Blueprint $table) {
+        Schema::create('bill_dish', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('quantity');
 
@@ -22,8 +22,7 @@ class CreateDishBillTable extends Migration
 
             $table->unsignedBigInteger('bill_id')->nullable();  
             $table->foreign('bill_id')->references('id')->on('bills')->onDelete('cascade');
-
-
+            
             $table->timestamps();
         });
     }
@@ -35,6 +34,6 @@ class CreateDishBillTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dish_bill');
+        Schema::dropIfExists('bill_dish');
     }
 }

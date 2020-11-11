@@ -87,7 +87,7 @@
                                                                 
                                                             </b>
                                                         </span>
-                                                        <h2 class="font-bold">${{ number_format($dish->price->price,2) }}</h2>
+                                                        <h2 class="font-bold">${{ number_format($dish->price,2) }}</h2>
                                                     </div>
                                                     <div class="col-2">
                                                         <ul style="list-style:none;">
@@ -151,30 +151,30 @@
                         <th>Precio de venta</th>
                     </tr>
                 </thead>
-                <tbody v-for="dish_bill in bill.dishes_bill">
+                <tbody v-for="dish_bill in bill.dishes">
                     <tr class="gradeX">
                         <th>
-                            @{{ dish_bill.dish.category.name }}
+                            @{{ dish_bill.category.name }}
                         </th>
                         <td>
                             <a href="/dish_detail/">
 
                                <b>
-                                  @{{ dish_bill.dish.name }} 
+                                  @{{ dish_bill.name }} 
                                </b>
 
                             </a> 
                         </td>
                         <td>
-                            @{{ dish_bill.quantity }}
+                            @{{ dish_bill.pivot.quantity }}
                         </td>
                         <td class="center">
                             @{{ dish_bill.created_at }}
                         </td>
                         <td class="center">
-                            $@{{ dish_bill.dish.price.price * dish_bill.quantity }}
+                            $@{{ dish_bill.price * dish_bill.pivot.quantity }}
 
-                            <button v-on:click="addDish(dish_bill.dish.id,{{$table->id}})" class="btn btn-info btn-circle" type="button" >
+                            <button v-on:click="addDish(dish_bill.id,{{$table->id}})" class="btn btn-info btn-circle" type="button" >
                                 <i class="fa fa-plus"></i>
                             </button>                                     
                             <button v-on:click="removeDish(dish_bill.dish.id)" class="btn btn-danger btn-circle" type="button" >
@@ -293,7 +293,7 @@
 
                     axios.get('/addDsih/'+dish_id+'/'+table_id+'/'+bill_id)
                     .then(res => {
-                        console.log(res)
+                        //actualizar monto
                         monto.innerHTML = res.data.data.total_amount
 
                         //asignar el id de la cuenta al iniciarla(en caso de que no este |iniciada)
@@ -303,6 +303,7 @@
                         }
 
                         this.bill = res.data.data
+                        //console.log(res.data.data.dishes)
 
                     })
                     .catch(err => {

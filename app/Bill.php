@@ -37,11 +37,16 @@ class Bill extends Model
 
     public function dishes()
     {
-        return $this->belongsToMany(Dish::class);
+        return $this->belongsToMany(Dish::class)->withPivot('quantity');
     }
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function scopeWithAndWhereHas($query, $relation, $constraint){
+        return $query->whereHas($relation, $constraint)
+                     ->with([$relation => $constraint]);
     }
 }

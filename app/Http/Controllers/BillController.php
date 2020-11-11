@@ -275,59 +275,219 @@ class BillController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    //añadir platillo a la cuenta
+    public function add_dish($dish_id, $table_id,$bill_id)
     {
-        //
+        if(Auth::user()->hasPermissionTo('Visualizar cuenta')){
+
+            //verificar si existe la cuenta
+            if($bill_id != 0){
+
+                //añadir platillo
+                $add_dish = $this->add_quantity_dish($bill_id,$dish_id);
+                return $add_dish;
+
+            }else{
+
+                //añadir cuenta si no existe
+                return $create_bill = $this->create_bill($table_id,$dish_id);
+            }
+
+        
+        }else{
+            //return redirect()->back()->with('error','No permitido');
+            return "no tiene permisos";
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function create_bill($table_id,$dish_id)
     {
-        //
+
+        //verificar que no hay una cuenta abierta en la mesa
+        $table = Bill::where('table_id',$table_id)
+                 ->orderBy('created_at','DESC')
+                 ->first(); 
+
+        if(isset($table) && $table->status == "open"){
+
+              return response()->json([
+                  'message' => "Mesa ocupada",
+                  'code' => 2,
+                  'data' => null
+              ], 200);  
+      
+        }else{
+
+            $bill = Bill::create([
+                'people_number' => 0,
+                'total_amount' => 0,
+                'table_id' => $table_id,
+                'user_id' => Auth::user()->id
+            ]);
+
+            //crear una cuenta si no se ha creado aun
+            if($bill){
+
+                //buscar el platillo para obtener precio
+                $dish = Dish::find($dish_id);
+
+                //añadir platillo a la cuenta
+                $bill->dishes()->attach($dish_id,['quantity' => 1]);
+
+                //modificar el monto de la cuenta
+                $bill->total_amount = $dish->price;
+                $bill->save();
+                $bill->load('dishes.category');
+
+                //retornar la cuenta
+                return response()->json([
+                    'message' => "Cuenta creada",
+                    'code' => 2,
+                    'data' => $bill
+                ], 200);
+            }
+
+        }  
+
+        
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    //añadir platillo a la cuenta
+    public function add_quantity_dish($bill_id, $dish_id)
     {
-        //
+        if(Auth::user()->hasPermissionTo('Visualizar cuenta')){
+
+            //ver si existe el platillo en esa cuenta
+            $bill = Bill::where('id',$bill_id)
+                    ->withAndWhereHas('dishes', function($q) use($dish_id){
+                        $q->where('dish_id',$dish_id);
+                    })
+                    ->first();
+
+            //obtener platillo
+            $dish = Dish::find($dish_id);
+
+
+            if($bill){
+
+                //sumarle al platillo
+                $bill->dishes()->updateExistingPivot($dish_id, ['quantity' => $bill->dishes[0]->pivot->quantity +=1]);
+                $bill->total_amount += $dish->price;
+                $bill->save();
+                $bill->load('dishes.category');
+
+                return response()->json([
+                    'message' => "Platillo sumado",
+                    'code' => 2,
+                    'data' => $bill
+                ], 200);
+
+            }else{
+
+                $bill = Bill::where('id',$bill_id)->first();
+                $bill->dishes()->attach($dish_id,['quantity' => 1]);
+                $bill->total_amount += $dish->price;
+                $bill->save();
+                $bill->load('dishes.category');
+
+                return response()->json([
+                    'message' => "Platillo agregado",
+                    'code' => 2,
+                    'data' => $bill
+                ], 200);
+
+            }
+
+            
+
+
+
+        }else{
+            //return redirect()->back()->with('error','No permitido');
+            return "no tiene permisos";
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    //quitar platillo a la cuenta
+    public function remove_quantity_dish($bill_id, $dish_id)
     {
-        //
+        if(Auth::user()->hasPermissionTo('Visualizar cuenta')){
+
+            //traer el platillo
+            $dish = DishesBill::where('bill_id',$bill_id)
+                    ->where('dish_id',$dish_id)
+                    ->with('bill')
+                    ->with(['dish.price' => function($q){
+                        $q->orderBy('created_at','DESC');
+                    }])
+                    ->first();
+
+
+            if(isset($dish) && $dish->quantity > 0){
+
+                //quitarle uno
+                $dish->quantity = $dish->quantity - 1;
+                $dish->save();
+
+                 //actialuzar el monto de la cuenta 
+                $dish->bill->total_amount = $dish->bill->total_amount - $dish->dish->price->price;
+                
+                $dish->bill->save();
+
+                //si la cantidad queda en 0 se elimina el platillo de la cuenta
+                if($dish->quantity == 0){
+
+                    $dish->delete();
+
+                    //traer la cuenta actualizada
+                    $bill = Bill::where('status','open')
+                                ->with(['dishes_bill.dish' => function($q){
+                                    $q->with('price');
+                                    $q->with('category');
+                                }])
+                                ->where('id',$bill_id)
+                                ->first();
+                    
+                    return response()->json([
+                        'message' => "Platillo eliminado de la cuenta",
+                        'code' => 2,
+                        'data' => $bill
+                    ], 200);    
+                
+                }else{
+
+                    //traer la cuenta actualizada
+                    $bill = Bill::where('status','open')
+                                ->with(['dishes_bill.dish' => function($q){
+                                    $q->with('price');
+                                    $q->with('category');
+                                }])
+                                ->where('id',$bill_id)
+                                ->first();
+
+                    return response()->json([
+                        'message' => "Platillo restado",
+                        'code' => 2,
+                        'data' => $bill
+                    ], 200);
+                }
+
+            }else{
+
+                return response()->json([
+                    'message' => "El platillo no existe en la cuenta",
+                    'code' => 2,
+                    'data' => null
+                ], 200); 
+                
+            }
+
+
+        }else{
+            //return redirect()->back()->with('error','No permitido');
+            return "no tiene permisos";
+        }        
     }
 }

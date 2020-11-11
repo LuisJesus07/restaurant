@@ -47,7 +47,7 @@ class MeseroController extends Controller
 
         if(Auth::user()->hasPermissionTo('Visualizar cuenta')){
         	//obtener el menu con los precios
-        	$categories = Category::with(['dishes.price' => function($q){
+        	$categories = Category::with(['dishes' => function($q){
                                 $q->orderBy('created_at','DESC');
                           }])
                           ->get();
@@ -59,13 +59,11 @@ class MeseroController extends Controller
             if(isset($bill_id)){
 
                 $bill = Bill::where('status','open')
-                    ->with(['dishes_bill.dish' => function($q){
-                        $q->with('price');
+                    ->with(['dishes' => function($q){
                         $q->with('category');
                     }])
                     ->where('id',$bill_id)
                     ->first(); 
-
 
             }else{
                 
