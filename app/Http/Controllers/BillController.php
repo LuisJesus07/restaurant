@@ -103,6 +103,7 @@ class BillController extends Controller
                 ->with('user')
                 ->with('dishes.category')
                 ->with('table')
+                ->with('client')
                 ->first();
 
         //obtener fecha
@@ -495,5 +496,51 @@ class BillController extends Controller
             //return redirect()->back()->with('error','No permitido');
             return "no tiene permisos";
         }        
+    }
+
+    //actualizar datos de la cuenta(relacionar con el cliente)
+    public function update(Request $request)
+    {
+        if(Auth::user()->hasPermissionTo('Visualizar ventas')){
+
+            $bill = Bill::where('id',$request->bill_id)->first();
+
+            if($bill){
+
+                $request['fecha_salida'] = date('Y-m-d H:i');
+                $request['status'] = "close";
+
+                if($bill->update($request->all())){
+
+                    return response()->json([
+                        'message' => "Cuenta pagada",
+                        'code' => 2,
+                        'data' => $bill
+                    ], 200);
+
+                }
+
+                return response()->json([
+                    'message' => "Error al pagar cuenta",
+                    'code' => -2,
+                    'data' => null
+                ], 200);
+            }
+
+            return response()->json([
+                'message' => "No se encontro la cuenta",
+                'code' => -2,
+                'data' => null
+            ], 200);
+
+        }else{
+
+            return response()->json([
+                'message' => "No tiene permisos",
+                'code' => -2,
+                'data' => null
+            ], 200);
+
+        }
     }
 }

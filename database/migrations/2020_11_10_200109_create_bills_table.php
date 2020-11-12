@@ -31,7 +31,7 @@ class CreateBillsTable extends Migration
                 ->onDelete('cascade');
 
             $table->unsignedBigInteger('client_id')->nullable();
-            $table->foreign('client_id')->references('id')->on('users')
+            $table->foreign('client_id')->references('id')->on('clients')
                 ->onDelete('cascade');
 
             $table->timestamps();
