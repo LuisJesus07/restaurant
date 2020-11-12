@@ -33,16 +33,6 @@
                             Atendida por: {{$bill->user->name}} {{$bill->table->bills[0]->user->lastname}}<br> 
                             <hr>  
                         </address>
-                        <button class="btn btn-primary btn-block" onclick="proccessPayment(1,{{$bill->id}})" data-toggle="modal" data-target="#myModal">
-                            <b>
-                                EFECTIVO
-                            </b>
-                        </button> 
-                        <button class="btn btn-success btn-block" style="margin-top: 0px;" onclick="proccessPayment(2,{{$bill->id}})" data-toggle="modal" data-target="#myModal">
-                            <b>
-                                TARJETA
-                            </b>
-                        </button>  
                         <a href="/bill_detail/{{$bill->id}}">
                             <button class="btn btn-warning btn-block">Detalles</button>
                         </a> 

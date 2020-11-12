@@ -12,7 +12,7 @@ class Bill extends Model
      * @var array
      */
     protected $fillable = [
-        'people_number', 'total_amount','status', 'box_cut', 'table_id', 'user_id'
+        'people_number', 'total_amount','status', 'fecha_salida', 'razon_social', 'box_cut', 'table_id', 'user_id', 'client_id',
     ];
 
     /**
@@ -43,6 +43,11 @@ class Bill extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
     }
 
     public function scopeWithAndWhereHas($query, $relation, $constraint){

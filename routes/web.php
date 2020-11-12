@@ -66,6 +66,9 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('removeDish/{bill_id}/{dish_id}', 'DishesBillController@remove_quantity_dish');
 	Route::get('add_people_number/{bill_id}/{table_id}' , 'BillController@add_people_number');
 	Route::get('remove_people_number/{bill_id}' , 'BillController@remove_people_number');
+
+	//rutas del modulo clientes
+	Route::get('/clients/get/{rfc}', 'ClientController@get');
  
 
 });

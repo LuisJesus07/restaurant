@@ -105,8 +105,6 @@ class BillController extends Controller
                 ->with('table')
                 ->first();
 
-        //return $bill;
-
         //obtener fecha
         $date = $bill->created_at->format('d-m-Y');
 
@@ -116,6 +114,12 @@ class BillController extends Controller
         //obtener hora de salida
         $fecha_salida = date_create($bill->fecha_salida);
         $hora_salida = date_format($fecha_salida,'H:i:s');
+
+        //obtener iva(en monto)
+        $bill->iva = $bill->total_amount * 0.16;
+
+        //obtener total con iva
+        $bill->final_total = $bill->total_amount + $bill->iva;
 
         //obtener cantidad de bebidas y platillos
         $num_bebidas = 0;

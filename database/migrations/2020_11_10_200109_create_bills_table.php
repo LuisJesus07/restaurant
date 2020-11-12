@@ -19,6 +19,7 @@ class CreateBillsTable extends Migration
             $table->string('total_amount')->nullable();
             $table->string('status')->default('open'); 
             $table->dateTime('fecha_salida')->nullable();
+            $table->string('razon_social')->nullable();
 
             $table->unsignedBigInteger('table_id');
             $table->foreign('table_id')->references('id')->on('tables')
@@ -27,6 +28,10 @@ class CreateBillsTable extends Migration
 
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')
+                ->onDelete('cascade');
+
+            $table->unsignedBigInteger('client_id')->nullable();
+            $table->foreign('client_id')->references('id')->on('users')
                 ->onDelete('cascade');
 
             $table->timestamps();
