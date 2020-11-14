@@ -404,30 +404,129 @@
 
     <!--Modal Agregar --> 
     <div class="modal inmodal" id="modal-add-cliente" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content ">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content animated flipInY">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <i class="fa fa-money modal-icon"></i>
-                    <h4 class="modal-title">Agregar cliente</h4> 
+                    <h4 class="modal-title">Registrar cliente</h4>
+                    <small class="font-bold">
+                        Rellene los campos nesesarios.
+                    </small>
                 </div>
-                <div class="modal-body">
-                    <h2>
-                        DEUDA: <b><span id="monto"></span></b>
-                    </h2>
-                    <hr>
-                    <h2>
-                        PAGANDO: $<input id="pagando" type="text" name="" onkeypress="return justNumbers(event);" onkeyup="calculando()">
-                    </h2>
-                    <hr>
-                    <h2 id="section_cambio">
-                        CAMBIO: <b><span id="cambio">$0.00 MXN</span></b>
-                    </h2>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-white" data-dismiss="modal">CANCELAR</button> 
-                    <button type="button" class="btn btn-primary"> FINALIZAR </button>
-                </div>
+                <form>
+                    @csrf
+                    <div class="modal-body">
+
+                        <input type="hidden" name="bill_id" value="{{$bill->id}}" id="bill_id-add-client">
+
+                        <div class="form-group  row">
+                            <label class="col-sm-2 col-form-label">
+                                <b>
+                                    Nombre
+                                </b>
+                            </label> 
+                            <div class="col-sm-10">
+                                <div class="input-group date">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                    </span>
+                                    <input type="text" name="name" class="form-control" id="name-add-client">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group  row">
+                            <label class="col-sm-2 col-form-label">
+                                <b>
+                                    E-mail
+                                </b>
+                            </label> 
+                            <div class="col-sm-10">
+                                <div class="input-group date">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                    </span>
+                                    <input type="text" name="email" class="form-control" id="email-add-client">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group  row">
+                            <label class="col-sm-2 col-form-label">
+                                <b>
+                                    Dirección
+                                </b>
+                            </label> 
+                            <div class="col-sm-10">
+                                <div class="input-group date">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-address-book"></i>
+                                    </span>
+                                    <input type="text" name="address" class="form-control" id="address-add-client">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div> 
+
+                        <div class="form-group  row">
+                            <label class="col-sm-2 col-form-label">
+                                <b>
+                                    Codigo postal
+                                </b>
+                            </label> 
+                            <div class="col-sm-10">
+                                <div class="input-group date">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-lock"></i>
+                                    </span>
+                                    <input type="text" name="zip_code" class="form-control" id="zip_code-add-client">
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div> 
+                         
+                        <div class="form-group  row">
+                            <label class="col-sm-2 col-form-label">
+                                <b>
+                                    RFC
+                                </b>
+                            </label> 
+                            <div class="col-sm-10">
+                                <div class="input-group date">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-drivers-license-o"></i>
+                                    </span>
+                                    <input type="text" name="rfc" class="form-control"  id="rfc-add-client"> 
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group  row">
+                            <label class="col-sm-2 col-form-label">
+                                <b>
+                                    Razón social
+                                </b>
+                            </label> 
+                            <div class="col-sm-10">
+                                <div class="input-group date">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-drivers-license-o"></i>
+                                    </span>
+                                    <input type="text" name="razon_social" class="form-control" id="razon_social-add-client"> 
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div> 
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                        <button class="btn btn-primary" id="btn-add-client">Añadir</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -542,6 +641,71 @@
 
                             //limpiar inputs del form
                             limpiarForm()
+                        }
+                    })
+
+                }
+            })
+            .catch(function(error){
+                console.log(error)
+            })
+
+        })
+
+        //agregar cliente y relcionar con cuenta
+        $("#btn-add-client").click( function(e){
+            e.preventDefault()
+            //console.log("Pagada")
+            axios.post('{{ url("/clients/bill") }}', {
+                'bill_id': $("#bill_id-add-client").val(),
+                'name': $("#name-add-client").val(),
+                'email': $("#email-add-client").val(),
+                'address': $("#address-add-client").val(),
+                'zip_code': $("#zip_code-add-client").val(),
+                'rfc': $("#rfc-add-client").val(),
+                'razon_social': $("#razon_social-add-client").val()
+            })
+            .then(function(response){
+                console.log(response)
+
+                //si el code es igual a 2, se actualizo correctamente
+                if(response.data.code == 2){
+
+                    $('#modal-add-cliente').modal('hide');
+
+                    $("#btn-cancelar").fadeOut(200)
+                    $("#info-client").fadeOut(200)
+                    $("#label-info-cliente").fadeOut(200)
+                    $("#print-invoice").removeClass("d-none")
+
+
+
+                    $("#date-salida").text(response.data.data.fecha_salida)
+
+                    //mensaje de exito
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Generar PDF',
+                        text: 'Registro completado, favor de presionar el botón para descargar el pdf.',
+                        confirmButtonText: 'Descargar PDf',
+                        showLoaderOnConfirm: true,
+                        preConfirm: function () {
+
+                            axios.get('../../API/controllers/institucion/createPDF.php')
+                            .then(function (response){
+                                //console.log(response)
+                                //descargar pdf
+                                var link = document.createElement('a');
+                                link.href = response.config.url;
+                                link.download = 'ejemplo_generar.pdf';
+                                link.dispatchEvent(new MouseEvent('click'));
+                            })
+                            .catch(function (error){
+                                console.log(error)
+                            })
+
+                            //limpiar inputs del form
+                            //limpiarForm()
                         }
                     })
 
