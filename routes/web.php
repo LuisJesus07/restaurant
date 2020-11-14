@@ -72,6 +72,8 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('/clients/get/{rfc}', 'ClientController@get');
 	//crear cliente y rlacionar con cueta
 	Route::post('/clients/bill', 'ClientController@store');
+
+	Route::get('/test-pdf', 'PDFController@generatePDF');
  
 
 });
