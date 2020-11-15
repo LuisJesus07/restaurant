@@ -10,7 +10,9 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="m-b-md">
-                                <button class="btn btn-primary float-right @if($bill->status=="open") d-none @endif" id="print-invoice">Obtener factura</button>
+                                <a href="{{ url("/pdf/generate") }}/{{$bill->id}}">
+                                    <button class="btn btn-primary float-right @if($bill->status=="open") d-none @endif" id="print-invoice">Obtener factura</button>
+                                </a>
 
                                 @if($bill->status == "cancelada")
                                     <label class="float-right label label-danger"><h3>Cuenta cancelada</h3></label>
@@ -626,7 +628,9 @@
                         showLoaderOnConfirm: true,
                         preConfirm: function () {
 
-                            axios.get('../../API/controllers/institucion/createPDF.php')
+                            window.location.href = '{{ url("/pdf/generate") }}/' + $("#bill_id").val();
+
+                            /*axios.get('{{ url("/pdf/generate") }}/' + $("#bill_id").val())
                             .then(function (response){
                                 //console.log(response)
                                 //descargar pdf
@@ -637,10 +641,8 @@
                             })
                             .catch(function (error){
                                 console.log(error)
-                            })
+                            })*/
 
-                            //limpiar inputs del form
-                            limpiarForm()
                         }
                     })
 
@@ -691,7 +693,9 @@
                         showLoaderOnConfirm: true,
                         preConfirm: function () {
 
-                            axios.get('../../API/controllers/institucion/createPDF.php')
+                            window.location.href = '{{ url("/pdf/generate") }}/' + $("#bill_id-add-client").val();
+
+                            /*axios.get('/pdf/generate/'+$("#bill_id-add-client").val())
                             .then(function (response){
                                 //console.log(response)
                                 //descargar pdf
@@ -705,7 +709,7 @@
                             })
 
                             //limpiar inputs del form
-                            //limpiarForm()
+                            //limpiarForm()*/
                         }
                     })
 

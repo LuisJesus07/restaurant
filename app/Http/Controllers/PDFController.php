@@ -3,29 +3,36 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Bill;
 
 class PDFController extends Controller
 {
 
-    public function generatePDF()
+    public function generatePDF($bill_id)
     {
-    	$pdf = new Fpdf();
-		$pdf::AddPage();
-		$pdf::SetFont("Arial","B",18);
-		$pdf::Cell(0,10,"Title",0,"","C");
-		$pdf::Ln();
-		$pdf::Ln();
-		$pdf::SetFont("Arial","B",12);
-		$pdf::cell(25,8,"ID",1,"","C");
-		$pdf::cell(45,8,"Name",1,"","L");
-		$pdf::cell(35,8,"Address",1,"","L");
-		$pdf::Ln();
-		$pdf::SetFont("Arial","",10);
-		$pdf::cell(25,8,"1",1,"","C");
-		$pdf::cell(45,8,"John",1,"","L");
-		$pdf::cell(35,8,"New York",1,"","L");
-		$pdf::Ln();
-		$pdf::Output();
-		exit;
+
+    	//obtener la cuenta
+    	$bill = Bill::where('id',$bill_id)
+    			->with('table','dishes','user','client')
+    			->first();
+
+    	if($bill){
+
+    		//obtener iva(en monto)
+	        $bill->iva = $bill->total_amount * 0.16;
+
+	        //obtener total con iva
+	        $bill->final_total = $bill->total_amount + $bill->iva;
+
+	        //generar pdf y descargarlo
+	    	$pdf = \PDF::loadView('pdf.factura',compact('bill'));
+	     	return $pdf->download('pdf.factura.pdf');
+	     	//return $pdf->stream('pdf.factura.pdf');
+
+	     	//return view('pdf.factura', compact('bill'));
+
+    	}
+
+    	
     }
 }

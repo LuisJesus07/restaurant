@@ -73,7 +73,8 @@ Route::middleware(['auth'])->group(function () {
 	//crear cliente y rlacionar con cueta
 	Route::post('/clients/bill', 'ClientController@store');
 
-	Route::get('/test-pdf', 'PDFController@generatePDF');
+	//generar pdf
+	Route::get('/pdf/generate/{bill_id}', 'PDFController@generatePDF');
  
 
 });
