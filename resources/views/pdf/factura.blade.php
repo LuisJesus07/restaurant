@@ -52,8 +52,13 @@
         .information table {
             padding: 10px;
         }
+        .qr-title {
+            float: right;
+        }
         .qr {
-            margin-left: 5%;
+            float: right;
+            margin-top: 5%; 
+            margin-right: 5%;
         }
     </style>
 
@@ -147,8 +152,10 @@ Estado: Pagada
         </tfoot>
     </table>
 
-    <h3>Vizualizar factura en linea</h3>
-    <img class="qr" src="{{public_path()}}/img/qr.jpg" width="200">
+    <div class="qr">
+        <img src="{{public_path()}}/qrcodes/factura_{{$bill->id}}.svg" width="200">
+    </div>
+    
 </div>
 
     <div class="information" style="position: absolute; bottom: 0;">

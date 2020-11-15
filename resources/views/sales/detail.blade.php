@@ -11,7 +11,7 @@
                         <div class="col-lg-12">
                             <div class="m-b-md">
                                 <a href="{{ url("/pdf/generate") }}/{{$bill->id}}">
-                                    <button class="btn btn-primary float-right @if($bill->status=="open") d-none @endif" id="print-invoice">Obtener factura</button>
+                                    <button class="btn btn-primary float-right @if($bill->status=="open" || $bill->status=="cancelada") d-none @endif" id="print-invoice">Obtener factura</button>
                                 </a>
 
                                 @if($bill->status == "cancelada")
@@ -627,21 +627,8 @@
                         confirmButtonText: 'Descargar PDf',
                         showLoaderOnConfirm: true,
                         preConfirm: function () {
-
+                            //redirije a la descarga
                             window.location.href = '{{ url("/pdf/generate") }}/' + $("#bill_id").val();
-
-                            /*axios.get('{{ url("/pdf/generate") }}/' + $("#bill_id").val())
-                            .then(function (response){
-                                //console.log(response)
-                                //descargar pdf
-                                var link = document.createElement('a');
-                                link.href = response.config.url;
-                                link.download = 'ejemplo_generar.pdf';
-                                link.dispatchEvent(new MouseEvent('click'));
-                            })
-                            .catch(function (error){
-                                console.log(error)
-                            })*/
 
                         }
                     })
@@ -692,27 +679,23 @@
                         confirmButtonText: 'Descargar PDf',
                         showLoaderOnConfirm: true,
                         preConfirm: function () {
-
+                            //redirije a la url que genera el pdf
                             window.location.href = '{{ url("/pdf/generate") }}/' + $("#bill_id-add-client").val();
-
-                            /*axios.get('/pdf/generate/'+$("#bill_id-add-client").val())
-                            .then(function (response){
-                                //console.log(response)
-                                //descargar pdf
-                                var link = document.createElement('a');
-                                link.href = response.config.url;
-                                link.download = 'ejemplo_generar.pdf';
-                                link.dispatchEvent(new MouseEvent('click'));
-                            })
-                            .catch(function (error){
-                                console.log(error)
-                            })
-
-                            //limpiar inputs del form
-                            //limpiarForm()*/
                         }
                     })
 
+                }else{
+
+                    if(response.data.code == -2){
+
+                        $('#modal-add-cliente').modal('hide');
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Ocurrio un error',
+                            text: "error: "+response.data.data
+                        })
+                    }
                 }
             })
             .catch(function(error){
@@ -739,20 +722,16 @@
             event.preventDefault()
 
             Swal.fire({
-              title: "Desea cancelar la cuenta?",
-              text: "Una vez cancelada no se podrá cambiar el estado de la cuenta!",
-              icon: "warning",
-              buttons: true,
-              dangerMode: true,
-            })
-            .then((willDelete) => {
-              if (willDelete) {
-                swal("Cancelando! En un momento será cancelada!", {
-                  icon: "warning", 
-                });
-                window.location = '{{ url("/cancel_bill/$bill->id") }}';
-              } else { 
-              }
+                icon: 'warning',
+                title: 'Desea cancelar la cuenta?',
+                text: 'Una vez cancelada no se podrá cambiar el estado de la cuenta!',
+                confirmButtonText: 'Cancelar',
+                showLoaderOnConfirm: true,
+                preConfirm: function () {
+                    //redirije a la descarga
+                    window.location.href = '{{ url("/cancel_bill/$bill->id") }}';
+
+                }
             });
         }
 

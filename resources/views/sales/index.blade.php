@@ -3,53 +3,6 @@
 
 @section('content')
 	<div class="row">
-        <div class="col-lg-4">
-            <div class="ibox ">
-                <div class="ibox-title">
-                    <span class="label label-success float-right">Hoy</span>
-                    <h5>Ventas</h5>
-                </div>
-                <div class="ibox-content">
-                    <h1 class="no-margins">${{$ventas_hoy}}</h1>
-                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div>
-                    <small>Monto total</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="ibox ">
-                <div class="ibox-title">
-                    <span class="label label-info float-right">Mes</span>
-                    <h5>Ventas</h5>
-                </div>
-                <div class="ibox-content">
-                    <h1 class="no-margins">${{$ventas_mes}}</h1>
-                    <div class="stat-percent font-bold text-info">20% <i class="fa fa-level-up"></i></div>
-                    <small>Monto total</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="ibox ">
-                <div class="ibox-title">
-                    <span class="label label-primary float-right">Mes</span>
-                    <h5>Mejor mesero</h5>
-                </div>
-                <div class="ibox-content">
-                    <h1 class="no-margins">
-                    	@if(!empty($mejor_mesero))
-                    		${{ $mejor_mesero['total_amount'] }}
-                    	@endif
-                    </h1>
-                    <div class="stat-percent font-bold text-navy">44% <i class="fa fa-level-up"></i></div>
-                    <small>Nombre - 
-                        @if(!empty($mejor_mesero))
-                            {{$mejor_mesero['name']}}
-                        @endif
-                    </small>
-                </div>
-            </div>
-        </div>
 
         @if(Auth::user()->role->name == "Administrador" || Auth::user()->role->name == "Gerente")
             <div class="col-lg-12">

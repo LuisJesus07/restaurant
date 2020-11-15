@@ -29,69 +29,62 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        //if(Auth::user()->hasPermissionTo('Añadir usuarios')){
+        //validar que no exista un correo igual
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required|unique:clients',
+            'address' => 'required',
+            'zip_code' => 'required',
+            'rfc' => 'required|unique:clients'
+        ]);
 
-            //validar que no exista un correo igual
-            $validator = Validator::make($request->all(), [
-                'email' => 'unique:clients',
-                'rfc' => 'unique:clients'
-            ]);
+        if($validator->passes()){
 
-            if($validator->passes()){
+            $client = Client::create($request->all());
 
-                $client = Client::create($request->all());
+            if($client){
 
-                if($client){
+                //relacionar al cliente creado con la cuenta
+                $bill = Bill::find($request->bill_id);
+                $bill->client_id = $client->id;
+                $bill->razon_social = $request->razon_social;
+                $bill->fecha_salida = date('Y-m-d H:i');
+                $bill->status = "close";
 
-                    //relacionar al cliente creado con la cuenta
-                    $bill = Bill::find($request->bill_id);
-                    $bill->client_id = $client->id;
-                    $bill->razon_social = $request->razon_social;
-                    $bill->fecha_salida = date('Y-m-d H:i');
-                    $bill->status = "close";
-
-                    if($bill->save()){
-
-                        return response()->json([
-                            'message' => "Cuenta pagada",
-                            'code' => 2,
-                            'data' => $bill
-                        ], 200);
-
-                    } 
+                if($bill->save()){
 
                     return response()->json([
-                        'message' => "Error al pagar cuenta",
-                        'code' => -2,
-                        'data' => null
+                        'message' => "Cuenta pagada",
+                        'code' => 2,
+                        'data' => $bill
                     ], 200);
 
-                }
+                } 
 
                 return response()->json([
-                    'message' => "Error al crear cliente",
+                    'message' => "Error al pagar cuenta",
                     'code' => -2,
                     'data' => null
                 ], 200);
 
             }
 
-            //retornar errores
             return response()->json([
-                'message' => "Error",
+                'message' => "Error al crear cliente",
                 'code' => -2,
-                'data' => $validator->errors()->all()
+                'data' => null
             ], 200);
 
-        /*}else{
+        }
 
-            return response()->json([
-              'message' => "Error al crear el registro",
-              'code' => -2,
-              'data' => null
-            ], 403);
+        //retornar errores
+        return response()->json([
+            'message' => "Error",
+            'code' => -2,
+            'data' => $validator->errors()->all()
+        ], 200);
 
-        }*/
+        
     }
 
     /**
