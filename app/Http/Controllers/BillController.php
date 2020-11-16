@@ -422,73 +422,47 @@ class BillController extends Controller
     {
         if(Auth::user()->hasPermissionTo('Visualizar cuenta')){
 
-            //traer el platillo
-            $dish = DishesBill::where('bill_id',$bill_id)
-                    ->where('dish_id',$dish_id)
-                    ->with('bill')
-                    ->with(['dish.price' => function($q){
-                        $q->orderBy('created_at','DESC');
-                    }])
+
+            //ver si existe el platillo en esa cuenta
+            $bill = Bill::where('id',$bill_id)
+                    ->withAndWhereHas('dishes', function($q) use($dish_id){
+                        $q->where('dish_id',$dish_id);
+                    })
                     ->first();
 
+            //obtener platillo
+            $dish = Dish::find($dish_id);
 
-            if(isset($dish) && $dish->quantity > 0){
 
-                //quitarle uno
-                $dish->quantity = $dish->quantity - 1;
-                $dish->save();
+            if($bill){
 
-                 //actialuzar el monto de la cuenta 
-                $dish->bill->total_amount = $dish->bill->total_amount - $dish->dish->price->price;
-                
-                $dish->bill->save();
 
-                //si la cantidad queda en 0 se elimina el platillo de la cuenta
-                if($dish->quantity == 0){
+                //restarle al platillo
+                $bill->dishes()->updateExistingPivot($dish_id, ['quantity' => $bill->dishes[0]->pivot->quantity -=1]);
+                $bill->total_amount -= $dish->price;
 
-                    $dish->delete();
-
-                    //traer la cuenta actualizada
-                    $bill = Bill::where('status','open')
-                                ->with(['dishes_bill.dish' => function($q){
-                                    $q->with('price');
-                                    $q->with('category');
-                                }])
-                                ->where('id',$bill_id)
-                                ->first();
-                    
-                    return response()->json([
-                        'message' => "Platillo eliminado de la cuenta",
-                        'code' => 2,
-                        'data' => $bill
-                    ], 200);    
-                
-                }else{
-
-                    //traer la cuenta actualizada
-                    $bill = Bill::where('status','open')
-                                ->with(['dishes_bill.dish' => function($q){
-                                    $q->with('price');
-                                    $q->with('category');
-                                }])
-                                ->where('id',$bill_id)
-                                ->first();
-
-                    return response()->json([
-                        'message' => "Platillo restado",
-                        'code' => 2,
-                        'data' => $bill
-                    ], 200);
+                //ver si al platillo ya no le quedan cantidad para eliminarlo de la cuenta
+                if($bill->dishes[0]->pivot->quantity == 0){
+                    $bill->dishes()->detach($dish_id);
                 }
+
+                $bill->save();
+                $bill->load('dishes.category');
+
+                return response()->json([
+                    'message' => "Platillo restado",
+                    'code' => 2,
+                    'data' => $bill
+                ], 200);
 
             }else{
 
                 return response()->json([
-                    'message' => "El platillo no existe en la cuenta",
-                    'code' => 2,
+                    'message' => "Error en el servidor",
+                    'code' => -2,
                     'data' => null
-                ], 200); 
-                
+                ], 200);
+
             }
 
 

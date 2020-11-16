@@ -109,44 +109,18 @@ class UserController extends Controller
         $tables_user = array();
 
         if($user->roles[0]->name == "Mesero"){
-
-            
             //mesas asignadas al mesero
-            $tables_user = $user->tables()->with('area')->get();
-
-            //ultimas 30 cuentas atendidas
-            $cuentas = $user->bills()->with('table')
-                       ->orderBy('created_at','DESC')
-                       ->where('bills.status','<>','cancelada')
-                       ->take(30)
-                       ->get();
-
-            //clientes atendidis este mes
-            $clientes_mes = $user->bills()
-                        ->whereYear('created_at', date('Y'))
-                        ->whereMonth('created_at', date('m'))
-                        ->where('status','close')
-                        ->count();
-
-            //monto de las mesas atendidas este mes
-            $ventas_mes = $user->bills()
-                        ->whereYear('created_at', date('Y'))
-                        ->whereMonth('created_at', date('m'))
-                        ->where('status','close')
-                        ->sum('total_amount');
-
+            $tables_user = $user->tables()->get();
         }
 
         //para el select al editar
         $roles = Role::all();
         
-        return view('sistemas.users.detail', compact('user','main_title','second_level', 'tables_user', 'roles', 'tables', 'clientes_mes', 'ventas_mes','tables_user', 'cuentas'));
+        return view('sistemas.users.detail', compact('user','main_title','second_level', 'tables_user', 'roles', 'tables','tables_user'));
     }
 
     public function assignTable(Request $request)
     {
-
-
         if(Auth::user()->hasPermissionTo('Editar usuarios')){
 
             //encontrar al usuario
@@ -261,15 +235,13 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        if(Auth::user()->hasPermissionTo('Eliminar usuarios') ){
+        if(Auth::user()->hasPermissionTo('Eliminar usuarios')){
 
             $user = null;
 
             if($user = User::find($id)){
 
-                $user->status = "inactive";
-
-                if($user->save()){
+                if($user->delete()){
                     return response()->json([
                         'message' => "Registro Eliminado correctamente",
                         'code' => 2,

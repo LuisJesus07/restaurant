@@ -93,7 +93,7 @@
 	          </button>
 	        </div>
 	        <div class="modal-body">
-	          <form method="POST" action="/dish">
+	          <form method="POST" action="/dishes">
 	            @csrf
 	            <div class="form-group">
 	              <label for="exampleInputEmail1">Nombre</label>

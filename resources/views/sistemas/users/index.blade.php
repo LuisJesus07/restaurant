@@ -36,7 +36,7 @@
 				                    <td>{{$user->email}}</td>
 				                    <td class="center">-</td>
 				                    <td>
-								      	<a href="/user_detail/{{$user->email}}">
+								      	<a href="/users/detail/{{$user->email}}">
 								      		<button class="btn btn-warning" >Detalles</button>
 								      	</a>
 								      	<a href="#" onclick="deleteThis({{$user->id}})">
@@ -191,22 +191,29 @@
 	@endsection
 
 	@section('scripts')
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script type="text/javascript">
     
 	    function deleteThis(id){
 	      console.log(id)
 
-	      axios.delete('user/'+id)
+	      axios.delete('users/'+id)
           .then(function (response) {
             
             if(response.data.code == 2){
-              swal("Eliminado!", "El usuario ha sido eliminado.", "success");
-
-              
+              Swal.fire({
+	                icon: 'success',
+	                title: 'Eliminar usuario',
+	                text: "Usuario eliminado con exito"
+	            })
 
             }else{
-              swal("Error!", "No se pudo eliminar.", "error");
+              Swal.fire({
+	                icon: 'error',
+	                title: 'Error en el servidor',
+	                text: "Error al eliminar al usuario"
+	            })
             }
             
             

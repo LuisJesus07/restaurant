@@ -46,8 +46,8 @@
             background-color: #18a689;
             color: #FFF;
         }
-        .information .logo {
-            margin: 5px;
+        .logo img{
+            margin-left: -40%;
         }
         .information table {
             padding: 10px;
@@ -59,6 +59,20 @@
             float: right;
             margin-top: 5%; 
             margin-right: 5%;
+        }
+        .firma{
+            margin-top: 24%;
+            margin-left: 34%;
+        }
+
+        .firma hr{
+            margin-top: -5%;
+            margin-left: -7%;
+            width: 50%;
+        }
+
+        .firma label {
+            margin-left: 8%;
         }
     </style>
 
@@ -81,8 +95,8 @@ Estado: Pagada
 </pre>
 
                 </td>
-                <td align="center">
-                     <img src="{{public_path()}}/img/logo.png" alt="Logo" width="200" class="logo"/>
+                <td align="center" class="logo">
+                     <img src="{{public_path()}}/img/logo.png" alt="Logo" width="200"/>
                 </td>
                 <td align="right" style="width: 40%;">
 
@@ -170,6 +184,12 @@ Estado: Pagada
             </tr>
 
         </table>
+    </div>
+
+    <div class="firma">
+        <img src="{{public_path()}}/img/firma.jpg" width="200">
+        <hr>
+        <label>Firma digital</label>
     </div>
 
 </body>

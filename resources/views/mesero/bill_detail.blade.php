@@ -90,13 +90,13 @@
                                                         <h2 class="font-bold">${{ number_format($dish->price,2) }}</h2>
                                                     </div>
                                                     <div class="col-2">
-                                                        <ul style="list-style:none;">
-                                                            <li>
+                                                        <ul style="list-style:none; padding-left: 0px;">
+                                                            <li style="margin-bottom: 5px;">
                                                                 <button v-on:click="addDish({{$dish->id}},{{$table->id}})" class="btn btn-info btn-circle" type="button" >
                                                                     <i class="fa fa-plus"></i>
                                                                 </button>  
                                                             </li>
-                                                            <li>
+                                                            <li style="margin-bottom: 5px;">
                                                                 <button v-on:click="removeDish({{$dish->id}})" class="btn btn-danger btn-circle" type="button" style="">
                                                                     <i class="fa fa-minus"></i>
                                                                 </button>   
@@ -151,13 +151,13 @@
                         <th>Precio de venta</th>
                     </tr>
                 </thead>
-                <tbody v-for="dish_bill in bill.dishes">
-                    <tr class="gradeX">
+                <tbody>
+                    <tr class="gradeX" v-for="dish_bill in bill.dishes">
                         <th>
                             @{{ dish_bill.category.name }}
                         </th>
                         <td>
-                            <a href="/dish_detail/">
+                            <a href="#" data-toggle="modal" data-target="#myModal" v-on:click="dish_details(dish_bill.name,dish_bill.description)">
 
                                <b>
                                   @{{ dish_bill.name }} 
@@ -177,7 +177,7 @@
                             <button v-on:click="addDish(dish_bill.id,{{$table->id}})" class="btn btn-info btn-circle" type="button" >
                                 <i class="fa fa-plus"></i>
                             </button>                                     
-                            <button v-on:click="removeDish(dish_bill.dish.id)" class="btn btn-danger btn-circle" type="button" >
+                            <button v-on:click="removeDish(dish_bill.id)" class="btn btn-danger btn-circle" type="button" >
                                 <i class="fa fa-minus"></i>
                             </button>   
                         </td>

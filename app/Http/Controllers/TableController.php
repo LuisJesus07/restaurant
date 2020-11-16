@@ -36,8 +36,8 @@ class TableController extends Controller
                             $query->where('status','open');
                       }])->get();
 
-            return $tables;
-            #return view('tables.index', compact('tables','areas','main_title','add_action'));
+            #return $tables;
+            return view('tables.index', compact('tables','main_title','add_action'));
         
         }else{
 
@@ -92,11 +92,11 @@ class TableController extends Controller
             //platillos ordenados de la cuenta actual de la mesa
             $bill =  $table->bills('table_id',$id)
                        ->where('status','open')
-                       ->with('user' ,'dishes_bill')
+                       ->with('user' ,'dishes')
                        ->first();
             
-            return $table;
-            #return view('tables.detail', compact('table','main_title', 'second_level', 'bill'));
+            #return $table;
+            return view('tables.detail', compact('table','main_title', 'second_level', 'bill'));
 
             
 

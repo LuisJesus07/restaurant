@@ -115,24 +115,24 @@
 	                        </tr>
                         </thead>
                         <tbody>
-                            @if(isset($bill->dishes_bill) && count($bill->dishes_bill) > 0)
-	                        @foreach($bill->dishes_bill as $dish_bill)
+                            @if(isset($bill->dishes) && count($bill->dishes) > 0)
+	                        @foreach($bill->dishes as $dish)
 	                        <tr>
 	                            <td>
 	                            	<b>
-	                            		{{ $dish_bill->dish->category->name }}
+	                            		{{ $dish->category->name }}
 	                            	</b>
 	                            </td>
 	                            <td>
-                                    <a href="/dish_detail/{{$dish_bill->dish->id}}">
+                                    <a href="/dish_detail/{{$dish->id}}">
                                         <b>
-                                            {{ $dish_bill->dish->name }}
+                                            {{ $dish->name }}
                                         </b>
                                     </a>
                                 </td>
-	                            <td>{{ $dish_bill->quantity }}</td>
-	                            <td>{{ $dish_bill->created_at }}</td>
-	                            <td>${{ number_format($dish_bill->price->price * $dish_bill->quantity,2) }} </td>
+	                            <td>{{ $dish->pivot->quantity }}</td>
+	                            <td>{{ $dish->created_at }}</td>
+	                            <td>${{ number_format($dish->price * $dish->pivot->quantity,2) }} </td>
 	                        </tr> 
 	                        @endforeach
                             @endif
@@ -150,34 +150,6 @@
 
         </div>
 
-        <div class="col-md-12">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>Promedio de venta por <b>Mes</b></h5>
-                        </div>
-                        <div class="ibox-content">
-                            <div>
-                                <canvas id="barChart1" height="140"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>Promedio de venta por <b>Semana</b></h5>
-                        </div>
-                        <div class="ibox-content">
-                            <div>
-                                <canvas id="barChart2" height="140"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div> 
 
 
@@ -211,108 +183,5 @@
     
 
   </script>
-<!-- ChartJS-->
-<script src="{{ asset('js/plugins/chartJs/Chart.min.js') }}"></script>
-<script type="text/javascript">
-    $(function () {
 
-        const sales_week = {!! json_encode($sales_week) !!};
-        const sales_month = {!! json_encode($sales_month) !!};
-
-        console.log(sales_month)
-
-        var barDataWeek = {
-            labels: [
-                        sales_week[6].dia, 
-                        sales_week[5].dia, 
-                        sales_week[4].dia, 
-                        sales_week[3].dia, 
-                        sales_week[2].dia, 
-                        sales_week[1].dia, 
-                        sales_week[0].dia
-                    ],
-            datasets: [
-                {
-                    label: "Ventas(Monto)",
-                    backgroundColor: 'rgba(26,179,148,0.5)',
-                    borderColor: "rgba(26,179,148,0.7)",
-                    pointBackgroundColor: "rgba(26,179,148,1)",
-                    pointBorderColor: "#fff",
-                    data: [
-
-                        sales_week[6].total_amount,
-                        sales_week[5].total_amount, 
-                        sales_week[4].total_amount, 
-                        sales_week[3].total_amount, 
-                        sales_week[2].total_amount, 
-                        sales_week[1].total_amount, 
-                        sales_week[0].total_amount,
-                        0
-                    ]
-                }
-                // ,
-                // {
-                //     label: "Data 2",
-                //     backgroundColor: 'rgba(26,179,148,0.5)',
-                //     borderColor: "rgba(26,179,148,0.7)",
-                //     pointBackgroundColor: "rgba(26,179,148,1)",
-                //     pointBorderColor: "#fff",
-                //     data: [28, 48, 40, 19, 86, 27, 90]
-                // }
-            ]
-        };
-
-
-        var barDataMonth = {
-            labels: [
-                        sales_month[5].mes, 
-                        sales_month[4].mes, 
-                        sales_month[3].mes, 
-                        sales_month[2].mes, 
-                        sales_month[1].mes, 
-                        sales_month[0].mes
-                    ],
-            datasets: [
-                {
-                    label: "Ventas(Monto)",
-                    backgroundColor: 'rgba(26,179,148,0.5)',
-                    borderColor: "rgba(26,179,148,0.7)",
-                    pointBackgroundColor: "rgba(26,179,148,1)",
-                    pointBorderColor: "#fff",
-                    data: [
-
-                        sales_month[5].total_amount, 
-                        sales_month[4].total_amount, 
-                        sales_month[3].total_amount, 
-                        sales_month[2].total_amount, 
-                        sales_month[1].total_amount, 
-                        sales_month[0].total_amount,
-                        
-                    ]
-                }
-                // ,
-                // {
-                //     label: "Data 2",
-                //     backgroundColor: 'rgba(26,179,148,0.5)',
-                //     borderColor: "rgba(26,179,148,0.7)",
-                //     pointBackgroundColor: "rgba(26,179,148,1)",
-                //     pointBorderColor: "#fff",
-                //     data: [28, 48, 40, 19, 86, 27, 90]
-                // }
-            ]
-        };
-
-        var barOptions = {
-            responsive: true
-        };
-
-
-        var ctx2 = document.getElementById("barChart1").getContext("2d");
-        new Chart(ctx2, {type: 'bar', data: barDataMonth, options:barOptions});
-
-        var ctx2 = document.getElementById("barChart2").getContext("2d");
-        new Chart(ctx2, {type: 'bar', data: barDataWeek, options:barOptions});
-
-    });
-</script>
 @endsection

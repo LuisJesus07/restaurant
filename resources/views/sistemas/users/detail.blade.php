@@ -52,35 +52,11 @@
                                 </h5>
                             </div>
 
-                            <div class="col-md-12"> 
-                                <h5> 
-                                	<i class="fa fa-calendar"></i>  
-                                	<strong>
-                                		&nbsp; Last access
-                                	</strong> 
-                                </h5>
-                            </div>
-                             
                         </div>  
 
                         <hr>
                          
                         <div class="user-button">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <button type="button" class="btn btn-warning btn-sm btn-block" onclick="getDataBack({{$user->id}})" data-toggle="modal" data-target="#ModalEdit">
-                                    	<i class="fa fa-pencil"></i> 
-                                    	Editar usuario
-                                    </button>
-                                </div>
-                                <div class="col-md-6">
-                                    <button type="button" class="btn btn-danger btn-sm btn-block">
-                                    	<i class="fa fa-trash"></i> 
-                                    	Eliminar usuario
-                                    </button>
-                                </div> 
-                            </div>
-                            <hr>
                             <div class="row">
                                 @if($user->role->name == "Mesero")
 
@@ -94,98 +70,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-				        <div class="col-lg-12">
-				            <div class="ibox ">
-				                <div class="ibox-title">
-				                    <span class="label label-success float-right">Este mes</span>
-				                    <h5>Clientes atendidos</h5>
-				                </div>
-				                <div class="ibox-content">
-				                    <h1 class="no-margins">{{$clientes_mes}}</h1>
-				                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div>
-				                    <small>Total</small>
-				                </div>
-				            </div>
-				        </div>
-				        <div class="col-lg-12">
-				            <div class="ibox ">
-				                <div class="ibox-title">
-				                    <span class="label label-info float-right">Este mes</span>
-				                    <h5>Ventas realizadas</h5>
-				                </div>
-				                <div class="ibox-content">
-				                    <h1 class="no-margins">$ {{$ventas_mes}}</h1>
-				                    <div class="stat-percent font-bold text-info">20% <i class="fa fa-level-up"></i></div>
-				                    <small>New orders</small>
-				                </div>
-				            </div>
-				        </div>
-				    </div>
             	</div>
         	</div>
         </div>
         <div class="col-md-8"> 
-
-            <div class="ibox ">
-                <div class="ibox-title">
-                    <h5>Actividades del usuario [demo]</h5>
-                    <div class="ibox-tools"> 
-                    </div>
-                </div>
-                <div class="ibox-content">
-
-                	<table class="table table-bordered">
-                        <thead>
-	                        <tr>
-	                            <th>Mesa</th>
-	                            <th>Hora de llegada</th>
-	                            <th>Hora de salida</th>
-	                            <th>Cantidad</th>
-	                            <th>Detalles</th>
-	                        </tr>
-                        </thead>
-                        <tbody>
-                            @if(isset($cuentas) && count($cuentas) > 0)
-	                        @foreach($cuentas as $cuenta)
-	                        <tr>
-	                            <td>
-                                    <a href="/table_detail/{{ $cuenta->table->id }}">
-    	                            	<b>
-    	                            		{{$cuenta->table->name}}
-    	                            	</b>
-                                    </a>
-	                            </td>
-	                            <td>{{ $cuenta->created_at }}</td>
-	                            <td>
-                                    @if($cuenta->status == "open")
-                                        ----------------------------
-                                    @else
-                                        {{ $cuenta->fecha_salida }}
-                                    @endif
-                                </td>
-	                            <td>${{ number_format($cuenta->total_amount,2) }}</td>
-	                            <td>
-	                            	<a href="/bill_detail/{{ $cuenta->id}}">
-                                        <button class="btn btn-primary btn-xs">
-    	                            		Detalles
-    	                            	</button>
-                                    </a>
-	                            </td>
-	                        </tr> 
-	                        @endforeach
-                            @endif
-                        </tbody>
-                    </table>
-
-                    <div> 
-
-                        <button class="btn btn-primary btn-block m"><i class="fa fa-arrow-down"></i> Show More</button>
-
-                    </div>
-
-                </div>
-            </div>
 
             @if($user->role->name == "Mesero")
             <div class="ibox ">
@@ -202,7 +90,6 @@
                                 <th>Nombre</th>
                                 <th>Número</th>
                                 <th>Capacidad</th>
-                                <th>Zona</th> 
                             </tr>
                         </thead>
                         <tbody>
@@ -218,7 +105,6 @@
                                 </td>
                                 <td>{{ $table->table_number }}</td>
                                 <td>{{ $table->capacity }} personas</td>
-                                <td>{{ $table->area->name}}</td> 
                             </tr> 
                             @endforeach
                             @endif
@@ -400,7 +286,7 @@
                     Rellene todos los campos del formulario.
                 </small>
             </div>
-            <form method="POST" action="/user_table">
+            <form method="POST" action="/users/tables">
                 @csrf
                 <div class="modal-body">
 
