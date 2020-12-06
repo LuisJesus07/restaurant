@@ -17,6 +17,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
+//vizualizar pdf
+Route::get('/pdf/view/{bill_id}', 'PDFController@viewPDF');
+
 
 
 Route::middleware(['auth'])->group(function () {
@@ -75,8 +78,6 @@ Route::middleware(['auth'])->group(function () {
 
 	//generar pdf y descargar
 	Route::get('/pdf/generate/{bill_id}', 'PDFController@generatePDF');
-	//vizualizar pdf
-	Route::get('/pdf/view/{bill_id}', 'PDFController@viewPDF');
  
 
 });

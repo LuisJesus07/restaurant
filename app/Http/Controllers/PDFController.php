@@ -29,6 +29,14 @@ class PDFController extends Controller
             //generar codigo qr
             $this->generate_qr($bill->id);
 
+            /* servidor
+            $pdf = \PDF::setOptions([
+                'logOutputFile' => storage_path('logs/log.htm'),
+                'tempDir' => storage_path('logs/')
+            ])
+            ->loadView('pdf.factura',compact('bill'));
+            */
+
 	        //generar pdf y descargarlo
 	    	$pdf = \PDF::loadView('pdf.factura',compact('bill'));
 	     	return $pdf->download('factura_'.$bill->id.'.pdf');
@@ -54,6 +62,14 @@ class PDFController extends Controller
 
             //obtener total con iva
             $bill->final_total = $bill->total_amount + $bill->iva;
+
+            /* servidor
+            $pdf = \PDF::setOptions([
+                'logOutputFile' => storage_path('logs/log.htm'),
+                'tempDir' => storage_path('logs/')
+            ])
+            ->loadView('pdf.factura',compact('bill'));
+            */
 
             //generar pdf y descargarlo
             $pdf = \PDF::loadView('pdf.factura',compact('bill'));
