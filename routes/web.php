@@ -57,7 +57,7 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('/bill_detail/{id}', 'BillController@detail');
 	Route::get('/close_bill/{id}', 'BillController@close_bill');
 	Route::get('/cancel_bill/{id}', 'BillController@cancel_bill');
-	Route::put('/bill/update','BillController@update');
+	Route::post('/bill/update','BillController@update');
 
 	//rutas del modulo caja
 	Route::get('/box', 'BoxController@index');

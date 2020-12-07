@@ -592,7 +592,7 @@
         $("#btn-pagar").click( function(e){
             e.preventDefault()
             //console.log("Pagada")
-            axios.put('{{ url("/bill/update") }}', {
+            axios.post('{{ url("/bill/update") }}', {
                 'client_id': $("#client_id").val(),
                 'bill_id': $("#bill_id").val(),
                 'name': $("#name_client").val(),
